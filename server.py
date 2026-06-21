@@ -104,6 +104,7 @@ def add_todo(
     bucket: str = "OTHER",
     client: str = "",
     urgent: bool = False,
+    confidence: str = "",
 ) -> dict:
     """Add a todo to Dot's todo list.
 
@@ -112,6 +113,7 @@ def add_todo(
         bucket: "CLIENTS" (client work) or "OTHER" (default).
         client: Client code or name to link, e.g. "TOW". Optional.
         urgent: Mark as urgent. Default False.
+        confidence: "High" or "Low" — drives the Hub's "?" review badge. Optional.
 
     Returns the created todo, or an error dict. Narrate the outcome in plain
     language — do NOT dump the raw JSON.
@@ -122,6 +124,8 @@ def add_todo(
     payload = {"title": title, "bucket": bucket, "urgent": urgent}
     if client:
         payload["client"] = client
+    if confidence in ("High", "Low"):
+        payload["confidence"] = confidence
     return _post("/api/todos", payload)
 
 
